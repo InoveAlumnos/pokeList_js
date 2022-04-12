@@ -22,7 +22,6 @@ for(const pokeData of data) {
     pokemons.push(new Pokemon(
                     pokeData.id,
                     pokeData.name,
-                    pokeData.thumbnail,
                     types,
                     pokeData.stats
                         )
