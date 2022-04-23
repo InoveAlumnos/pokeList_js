@@ -1,7 +1,7 @@
 
 "use strict";
 
-function addPokemonMouseEvents(pokemons) {
+function addPokemonEvents(pokemonsFiltrados) {
     // Apuntar a todas las tarjetas de pokemons (article)
     const tarjetas = document.querySelectorAll("article");
 
@@ -13,7 +13,7 @@ function addPokemonMouseEvents(pokemons) {
             const pokemonId = parseInt(tarjeta.getAttribute("pokemonId"));
             // Se busca el pokemon en la lista de pokemons
             // Se resta "1" porque la lista comienza en cero
-            const pokemon = pokemons[pokemonId-1];
+            const pokemon = pokemonsFiltrados[pokemonId-1];
             console.log(`Click pokemon: ${pokemon.name}`);
 
             pokeName.innerText = pokemon.name;
@@ -37,17 +37,25 @@ function addPokemonMouseEvents(pokemons) {
 
             // Setear la clase de type2 (si es que el pokemon tiene 2 clases)
             if (pokemon.types.length === 2) {
-            type2.innerHTML = pokemon.types[1];
-            type2.classList.add(type2clase(pokemon.types[1]));
+                type2.innerHTML = pokemon.types[1];
+                type2.classList.add(type2clase(pokemon.types[1]));
             } else {
-            type2.innerHTML = '';
-            type2.classList.add('hideType');
+                type2.innerHTML = '';
+                type2.classList.add('hideType');
             }
 
             // Mostrar la descripcion
             popup.classList.remove('hideType');
 
         };
+    }
+
+    /* Evento al cambiar el tipo de pokemon a mostrar */
+    document.querySelector('#typeSelected').onchange = () => {
+        pokemonsFiltrados = pokeFilter(pokemons);
+        pokeRender(pokemonsFiltrados);
+        // Almacenar la nueva seleccion en la session storage
+        sessionStorage.typeSelectValue = typeSelect.value;
     }
 }
 
