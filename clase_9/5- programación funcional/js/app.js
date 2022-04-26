@@ -17,7 +17,7 @@ typeSelect.value = typeSelectValue;
 // Lectura de datos
 const data = JSON.parse(jsonData);
 
-const pokeLoad = () => {
+const pokeLoad = (data) => {
     const pokemons = data.map(pokeData => {
         let types = [];
         for(const typeInfo of pokeData.types) {
@@ -31,6 +31,16 @@ const pokeLoad = () => {
                         pokeData.stats
                         );
     })
+    // -----------------------------------------------------
+    // Workarround: No es simple almacenar un objeto tipo clase
+    // o prototipo en memoria (session storage)
+    // Por ahora en este curso utilizaremos una variable global
+    // pero más adelante en React resolveremos esto de una forma más
+    // elegante
+    // -----------------------------------------------------
+    // Modifico la variable global para poder utilizarla
+    // más adelante en eventos
+    pokemonsGlobal = pokemons;
     return pokemons;
 }
 
@@ -58,16 +68,28 @@ const pokeRender = (pokemons) => {
     })
     const section = document.querySelector("section");
     section.innerHTML = accumulator;
+    return pokemons;
 };
 
 /* Crear los objetos pokemon */
-const pokemons = pokeLoad();
+// -----------------------------------------------------
+// Workarround: No es simple almacenar un objeto tipo clase
+// o prototipo en memoria (session storage)
+// Por ahora en este curso utilizaremos una variable global
+// pero más adelante en React resolveremos esto de una forma más
+// elegante
+// -----------------------------------------------------
+let pokemonsGlobal = [];
 
-/* Filtrar datos */
-let pokemonsFiltrados = pokeFilter(pokemons);
+/* 
+    1- Cargar datos
+    2- Filtrar datos
+    3- Renderizar datos
+    4- Agregar eventos 
+*/
 
-/* Renderizar datos */
-pokeRender(pokemonsFiltrados);
-
-/* Agregar eventos */
-addPokemonEvents(pokemonsFiltrados);
+/*
+    Resolveremos este enlace de funciones en un próximo
+    paso utilizando promesas (Promise)
+*/
+addPokemonEvents(pokeRender(pokeFilter(pokeLoad(data))));

@@ -14,11 +14,17 @@ const typeSelectValue = sessionStorage.typeSelectValue? sessionStorage.typeSelec
 // Cambiar el selector para que utilice este valor
 typeSelect.value = typeSelectValue;
 
-// Lectura de datos
-const data = JSON.parse(jsonData);
+// URL para fetchear datos
+const pokeURL = id => `https://pokeapi.co/api/v2/pokemon/${id}`;
 
-const pokeLoad = () => {
-    const pokemons = data.map(pokeData => {
+// Lectura de datos
+const pokeFetch = () => {
+    return Array(151).fill().map((_, index) => {
+        return fetch(pokeURL(index + 1)).then(response => response.json())
+    })
+}
+const pokeLoad = (data) => {
+    const pokemons = data.map( (pokeData) => {
         let types = [];
         for(const typeInfo of pokeData.types) {
             types.push(typeInfo.type.name);
@@ -31,6 +37,17 @@ const pokeLoad = () => {
                         pokeData.stats
                         );
     })
+
+    // -----------------------------------------------------
+    // Workarround: No es simple almacenar un objeto tipo clase
+    // o prototipo en memoria (session storage)
+    // Por ahora en este curso utilizaremos una variable global
+    // pero más adelante en React resolveremos esto de una forma más
+    // elegante
+    // -----------------------------------------------------
+    // Modifico la variable global para poder utilizarla
+    // más adelante en eventos
+    pokemonsGlobal = pokemons;
     return pokemons;
 }
 
@@ -58,16 +75,23 @@ const pokeRender = (pokemons) => {
     })
     const section = document.querySelector("section");
     section.innerHTML = accumulator;
+    return pokemons;
 };
 
 /* Crear los objetos pokemon */
-const pokemons = pokeLoad();
+// -----------------------------------------------------
+// Workarround: No es simple almacenar un objeto tipo clase
+// o prototipo en memoria (session storage)
+// Por ahora en este curso utilizaremos una variable global
+// pero más adelante en React resolveremos esto de una forma más
+// elegante
+// -----------------------------------------------------
+let pokemonsGlobal = [];
 
-/* Filtrar datos */
-let pokemonsFiltrados = pokeFilter(pokemons);
+const pokePromise = pokeFetch();
+Promise.all(pokePromise)
+.then(pokeLoad)
+.then(pokeFilter)
+.then(pokeRender)
+.then(addPokemonEvents)
 
-/* Renderizar datos */
-pokeRender(pokemonsFiltrados);
-
-/* Agregar eventos */
-addPokemonEvents(pokemonsFiltrados);
