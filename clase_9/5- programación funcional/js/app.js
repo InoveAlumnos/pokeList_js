@@ -32,15 +32,9 @@ const pokeLoad = (data) => {
                         );
     })
     // -----------------------------------------------------
-    // Workarround: No es simple almacenar un objeto tipo clase
-    // o prototipo en memoria (session storage)
-    // Por ahora en este curso utilizaremos una variable global
-    // pero más adelante en React resolveremos esto de una forma más
-    // elegante
-    // -----------------------------------------------------
-    // Modifico la variable global para poder utilizarla
+    // Se almacena en memoria los pokemons para utilizarlos
     // más adelante en eventos
-    pokemonsGlobal = pokemons;
+    sessionStorage.pokemons = JSON.stringify(pokemons);
     return pokemons;
 }
 
@@ -70,16 +64,6 @@ const pokeRender = (pokemons) => {
     section.innerHTML = accumulator;
     return pokemons;
 };
-
-/* Crear los objetos pokemon */
-// -----------------------------------------------------
-// Workarround: No es simple almacenar un objeto tipo clase
-// o prototipo en memoria (session storage)
-// Por ahora en este curso utilizaremos una variable global
-// pero más adelante en React resolveremos esto de una forma más
-// elegante
-// -----------------------------------------------------
-let pokemonsGlobal = [];
 
 /* 
     1- Cargar datos

@@ -53,7 +53,7 @@ const pokeRender = (pokemons) => {
     let accumulator = ""
     pokemons.forEach(pokemon => {
         // Evaluar según el tipo de pokemon que
-        // clase css asociar, suando switch
+        // clase css asociar, usando switch
         accumulator += pokemon.render(type2clase(pokemon.types[0]))
     })
     const section = document.querySelector("section");
