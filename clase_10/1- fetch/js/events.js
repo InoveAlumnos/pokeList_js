@@ -52,7 +52,16 @@ function addPokemonEvents(pokemonsFiltrados) {
 
     /* Evento al cambiar el tipo de pokemon a mostrar */
     document.querySelector('#typeSelected').onchange = () => {
-        pokeRender(pokeFilter(pokemonsGlobal));
+        /* JSON objecto a Pokemon */
+        const pokemons = JSON.parse(sessionStorage.pokemons).map(pokeData => {
+            return new Pokemon(
+                pokeData.id,
+                pokeData.name,
+                pokeData.types,
+                pokeData.stats
+                );
+        });
+        pokeRender(pokeFilter(pokemons));
         // Almacenar la nueva seleccion en la session storage
         sessionStorage.typeSelectValue = typeSelect.value;
     }
